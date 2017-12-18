@@ -1,22 +1,15 @@
-# -*- coding:utf-8 -*-
 import numpy as np
 from sklearn.decomposition import PCA
-raw_input=np.loadtxt(r"C:\Users\JDB2015F-KM\Desktop\データ\memeサンプル.csv",delimiter=",",skiprows=1,dtype=str)
-raw_input=np.delete(raw_input,1,1)
-raw_input=np.delete(raw_input,0,1)
-for i in range(raw_input.shape[0]):
-    for j in range(raw_input.shape[1]):
-        raw_input[i][j]=float(raw_input[i][j])
-for i in range(int(raw_input.shape[0]/5)):
-    for j in range(5):
-        
-moob=moob.T
-
-pca = PCA(n_components=2)
-pca.fit(moob)
-print ("means")
-print (pca.n_components_)
-print("Proportion of Variance")
-print(pca.explained_variance_ratio_)
-print("Cumulative Proportion")
-print(np.cumsum(pca.explained_variance_ratio_))
+import matplotlib.pyplot as plt
+import pandas as pd
+data = pd.read_csv(r"C:\Users\JDB2015F-KM\Desktop\data\memesample.csv",header=0).values[:,2:]
+span = 5
+row_num =data.shape[0]
+over_list = np.hstack([data[i:row_num-span+1+i] for i in range (span)])
+pca = PCA(n_components=5)
+pca.fit(over_list)
+print(pca.components_)
+ev_ratio = pca.explained_variance_ratio_
+ev_ratio = np.hstack([0,ev_ratio.cumsum()])
+plt.plot(ev_ratio)
+plt.show()
